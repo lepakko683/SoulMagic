@@ -1,0 +1,11 @@
+run/
+bin/
+src__/
+*.jar
+*.class
+.classpath
+.project
+.settings/
+.gradle/
+eclipse/
+MinecraftForge-README.txt

@@ -1,0 +1,16 @@
+[
+{
+  "modid": "soulmagic",
+  "name": "Soul Magic",
+  "description": "A magic mod focusing less on adding tools.",
+  "version": "${version}",
+  "mcversion": "${mcversion}",
+  "url": "",
+  "updateUrl": "",
+  "authorList": ["OkkapeL"],
+  "credits": "N/A",
+  "logoFile": "",
+  "screenshots": [],
+  "dependencies": []
+}
+]
