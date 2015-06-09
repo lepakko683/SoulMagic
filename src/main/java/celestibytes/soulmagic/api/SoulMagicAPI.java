@@ -1,10 +1,14 @@
 package celestibytes.soulmagic.api;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public class SoulMagicAPI {
 	
 	public static HashMap<String, Class<? extends ICurse>> curseRegistry = new HashMap<String, Class<? extends ICurse>>();
+	public static ArrayList<ICurse> curseArray = new ArrayList<ICurse>();
+	
+	//public static ArrayList<Tuple<>>
 	
 	/** @param curseId A string id to identify the curse, should be kept as short as possible. Preferably of form "modid:curseid" e.g. "soulmagic:gltt" for Curse of Gluttony 
 	 *  @param curse the curse class to register. See ICurse interface for more information. */

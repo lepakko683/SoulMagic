@@ -9,6 +9,5 @@ public class ServerProxy extends CommonProxy {
 	@Override
 	public void init(FMLInitializationEvent e) {
 		super.init(e);
-		//FMLCommonHandler.instance().bus().register();
 	}
 }

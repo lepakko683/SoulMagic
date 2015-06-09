@@ -65,7 +65,7 @@ public class LivingDropHandler {
 	
 	private static void dropItem(ArrayList<EntityItem> drops, EntityLivingBase entity, ItemStack item) {
 		EntityItem entityitem = new EntityItem(entity.worldObj, entity.posX, entity.posY, entity.posZ, item);
-        entityitem.delayBeforeCanPickup = 10;
-        drops.add(entityitem);
+		entityitem.delayBeforeCanPickup = 10;
+		drops.add(entityitem);
 	}
 }
