@@ -9,3 +9,5 @@ src__/
 .gradle/
 eclipse/
 MinecraftForge-README.txt
+Modding-README.txt
+forge*changelog.txt
