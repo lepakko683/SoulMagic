@@ -1,5 +1,8 @@
 package celestibytes.soulmagic.api;
 
+
+import celestibytes.soulmagic.datatypes.Tuple;
+import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 
@@ -9,7 +12,9 @@ public interface ICurse {
 	/** The amount of power a player has to have for the curse to have an effect */
 	public int getActivationPower(EntityPlayer player);
 	
-	/** The required things to cast the curse on someone, the searched area is 9x9 centered around the player's current block-aligned position
+	public Tuple<Block, Integer> getTriggerBlock();
+	
+	/** The required things to cast the curse on someone, the searched area is 9x9 centered around a special block
 	 *  The allowed types are:
 	 *  
 	 *  Integer: required power

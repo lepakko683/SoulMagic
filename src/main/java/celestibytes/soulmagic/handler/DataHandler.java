@@ -6,6 +6,7 @@ import java.util.UUID;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import celestibytes.soulmagic.datatypes.PlayerExtraData;
+import celestibytes.soulmagic.misc.Log;
 
 public class DataHandler {
 	public static HashMap<UUID, PlayerExtraData> playerData = new HashMap<UUID, PlayerExtraData>();
@@ -38,6 +39,7 @@ public class DataHandler {
 			return false;
 		}
 		
+		Log.debug("Data for player " + player.getDisplayName() + " set");
 		playerData.put(player.getUniqueID(), data);
 			
 		return true;

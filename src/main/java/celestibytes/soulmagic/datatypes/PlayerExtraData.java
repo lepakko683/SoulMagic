@@ -24,8 +24,8 @@ public class PlayerExtraData {
 	// soul data
 	// etc..
 	
-	public int curseSlots;
-	public int soulStatus; // -10 .. 10
+	public int curseSlots = 1;
+	public int soulStatus = 0; // -10 .. 10
 	
 	public List<ICurse> curses;
 	// list of abilities
@@ -49,11 +49,11 @@ public class PlayerExtraData {
 				try {
 					iter.remove();
 				} catch(UnsupportedOperationException e) {
-					// no need to spam the log
+					Log.debug("Iterator doesn't support removal of elements");
 				}
 			}
 		}
-		
+		Log.debug("Write to nbt succesful");
 	}
 	
 	public void writeToFile(File file, File backFile) {
@@ -62,6 +62,7 @@ public class PlayerExtraData {
 		boolean fail = false;
 		try {
 			CompressedStreamTools.writeCompressed(nbt, new FileOutputStream(file));
+			Log.debug("Write to file succesful");
 		} catch (IOException e) {
 			Log.err("Error while saving player extra data!");
 			e.printStackTrace();
@@ -71,6 +72,7 @@ public class PlayerExtraData {
 		if(!fail && !file.equals(backFile)) {
 			try {
 				Files.copy(file, backFile);
+				Log.debug("File backup succesful");
 			} catch (IOException e) {
 				Log.err("Error while backing up player extra data file!");
 				e.printStackTrace();

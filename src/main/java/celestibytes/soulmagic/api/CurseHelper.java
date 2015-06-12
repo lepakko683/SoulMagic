@@ -40,6 +40,14 @@ public class CurseHelper {
 	public static boolean addCurseToPlayer(Class<? extends ICurse> curse, EntityPlayer player) {
 		PlayerExtraData data = DataHandler.getExtraData(player);
 		if(data.curseSlots > data.curses.size()) {
+			Iterator<ICurse> iter = data.curses.iterator();
+			while(iter.hasNext()) {
+				ICurse cr = iter.next();
+				if(cr != null && cr.getClass() == curse) {
+					Log.debug("Player already had the curse!");
+					return false;
+				}
+			}
 			try {
 				ICurse curseInst = curse.newInstance();
 				data.curses.add(curseInst);

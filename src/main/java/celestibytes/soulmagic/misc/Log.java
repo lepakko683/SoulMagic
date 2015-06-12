@@ -13,7 +13,8 @@ public class Log {
 	}
 	
 	public static void debug(Object object) {
-		log(Level.DEBUG, object);
+		log(Level.INFO, "DEBUG: " + object);
+//		log(Level.DEBUG, object);
 	}
 	
 	public static void info(Object object) {
