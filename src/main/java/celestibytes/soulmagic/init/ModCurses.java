@@ -1,5 +1,6 @@
 package celestibytes.soulmagic.init;
 
+import net.minecraft.init.Blocks;
 import celestibytes.soulmagic.Ref;
 import celestibytes.soulmagic.api.SoulMagicAPI;
 import celestibytes.soulmagic.content.curses.CurseGluttony;
@@ -12,7 +13,7 @@ public class ModCurses {
 	public static final String CURSE_LUST = Ref.MOD_ID + ":lust";
 	
 	public static void init() {
-		SoulMagicAPI.registerCurse(CURSE_GLUTTONY, CurseGluttony.class);
-		SoulMagicAPI.registerCurse(CURSE_WRATH, CurseWrath.class);
+		SoulMagicAPI.registerCurse(CURSE_GLUTTONY, CurseGluttony.class, Blocks.gold_block, 0);
+		//SoulMagicAPI.registerCurse(CURSE_WRATH, CurseWrath.class);
 	}
 }

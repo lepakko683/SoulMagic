@@ -3,6 +3,7 @@ package celestibytes.soulmagic.content.curses;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import celestibytes.soulmagic.api.ICurse;
+import celestibytes.soulmagic.datatypes.CurseRequirements;
 import celestibytes.soulmagic.init.ModCurses;
 
 public class CurseWrath implements ICurse  {
@@ -13,17 +14,7 @@ public class CurseWrath implements ICurse  {
 	public int getActivationPower(EntityPlayer player) {
 		return 0;
 	}
-
-	@Override
-	public Object[] getCurseRequirements(EntityPlayer player) {
-		return null;
-	}
-
-	@Override
-	public Object[] getUncurseRequirements(EntityPlayer player) {
-		return null;
-	}
-
+	
 	@Override
 	public void onCursePlayer(EntityPlayer caster, EntityPlayer target) {
 		System.out.println("Attempting curse...");
@@ -52,6 +43,16 @@ public class CurseWrath implements ICurse  {
 	@Override
 	public String getCurseId() {
 		return ModCurses.CURSE_WRATH;
+	}
+
+	@Override
+	public CurseRequirements getCurseRequirements() {
+		return null;
+	}
+
+	@Override
+	public CurseRequirements getPlayerSpecificRequirements(EntityPlayer player) {
+		return null;
 	}
 
 }
