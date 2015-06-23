@@ -56,6 +56,8 @@ public class CurseHelper {
 				Log.err("Couldn't add a new curse to player " + player.getDisplayName() + ", curse class: " + curse.getName());
 				e.printStackTrace();
 			}
+		} else {
+			Log.info("Not enough curse slots!");
 		}
 		return false;
 	}

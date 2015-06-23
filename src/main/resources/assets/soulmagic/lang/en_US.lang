@@ -1,2 +1,6 @@
-
+# Misc
 itemGroup.soulmagic:creativeTab=Soul Magic
+
+# Items
+item.soulmagic:liquidCorruptOrb.name=DEBUG: toggle curses
+item.soulmagic:relic.name=Relic

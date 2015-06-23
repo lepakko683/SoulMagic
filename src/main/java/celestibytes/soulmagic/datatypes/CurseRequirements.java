@@ -17,35 +17,15 @@ public class CurseRequirements {
 		
 		public List<Tuple<IEntityLivingIdent, EntityLiving>> entities;
 		
-		private boolean isValid;
-		
 		public Done() {
-			isValid = false;
 			normalBlocks = new LinkedList<Tuple<Tuple<Block, Integer>, BlockPos>>();
 			entities = new LinkedList<Tuple<IEntityLivingIdent, EntityLiving>>();
 		}
 		
 		public boolean validate(CurseRequirements req, World world) {
-//			if(!normalBlocks.isEmpty()) {
-//				Iterator<Triple<Block, Integer, Integer>> iter1 = req.getRequiredBlocks().iterator();
-//				while(iter1.hasNext()) {
-//					Triple<Block, Integer, Integer> blc1 = iter1.next();
-//					Log.info("looking for count of " + blc1.c.intValue());
-//					Iterator<Tuple<Tuple<Block, Integer>, BlockPos>> iter2 = normalBlocks.iterator();
-//					int found = 0;
-//					while(iter2.hasNext()) {
-//						Tuple<Tuple<Block, Integer>, BlockPos> blc2 = iter2.next();
-//						if(blc1.a == blc2.a.a && blc1.b.intValue() == blc2.a.b.intValue()) {
-//							if(world.getBlock(blc2.b.x, blc2.b.y, blc2.b.z) == blc1.a && world.getBlockMetadata(blc2.b.x, blc2.b.y, blc2.b.z) == blc1.b.intValue()) {
-//								found++;
-//							}
-//						}
-//					}
-//					if(found < blc1.c.intValue()) {
-//						return false;
-//					}
-//				}
-//			}
+			if(!req.isTimeCorrect(world.getWorldTime(), !world.provider.isSurfaceWorld())) {
+				return false;
+			}
 			
 			if(req.normalBlocks != null && !req.normalBlocks.isEmpty()) {
 				Iterator<Triple<Block, Integer, Integer>> iter1 = req.getRequiredBlocks().iterator();
@@ -61,14 +41,11 @@ public class CurseRequirements {
 							}
 						}
 					}
-					Log.info("[blocks] Found: " + found);
+					Log.info("[blocks] Found: " + found + "x " + blc1.a.getUnlocalizedName());
 					if(found < blc1.c.intValue()) {
 						return false;
 					}
 				}
-				
-			} else {
-				Log.info("No required blocks.. o.O wat");
 			}
 			
 			if(!req.entities.isEmpty()) {
@@ -95,7 +72,7 @@ public class CurseRequirements {
 	}
 	
 	private int requiredEnergy;
-	private int startTime, endTime;
+	private long startTime, endTime;
 	private boolean allowTimeless;
 	
 	private List<Triple<Block, Integer, Integer>> normalBlocks;
@@ -106,11 +83,17 @@ public class CurseRequirements {
 		this.requiredEnergy = requiredEnergy;
         startTime = -1;
         endTime = -1;
+        allowTimeless = false;
         normalBlocks = new LinkedList<Triple<Block, Integer, Integer>>();
         entities = new LinkedList<Tuple<IEntityLivingIdent, Integer>>();
 	}
 	
-	public CurseRequirements setTimeFrame(int start, int end) {
+	public CurseRequirements setAllowTimeless(boolean value) {
+		this.allowTimeless = value;
+		return this;
+	}
+	
+	public CurseRequirements setTimeFrame(long start, long end) {
 		this.startTime = start;
 		this.endTime = end;
 		return this;
@@ -135,6 +118,7 @@ public class CurseRequirements {
 					
 					if(count > 0) {
 						normalBlocks.add(new Triple<Block, Integer, Integer>(blc.a, blc.b, count));
+						Log.info("added " + count + "x " + blc.a.getUnlocalizedName());
 					}
 				} else {
 					Iterator<Triple<Block, Integer, Integer>> iter2 = normalBlocks.iterator();
@@ -149,15 +133,16 @@ public class CurseRequirements {
 					
 					if(!exists) {
 						Iterator<Tuple<Block, Integer>> iter3 = blocks.iterator();
-						while(iter2.hasNext()) {
-							Tuple<Block, Integer> blc2 = iter3.next();
-							if(blc.a == blc2.a && blc.b.intValue() == blc2.b.intValue()) {
+						while(iter3.hasNext()) {
+							Tuple<Block, Integer> blc3 = iter3.next();
+							if(blc.a == blc3.a && blc.b.intValue() == blc3.b.intValue()) {
 								count++;
 							}
 						}
 						
 						if(count > 0) {
 							normalBlocks.add(new Triple<Block, Integer, Integer>(blc.a, blc.b, count));
+							Log.info("added " + count + "x " + blc.a.getUnlocalizedName());
 						}
 					}
 				}
@@ -200,9 +185,9 @@ public class CurseRequirements {
 					
 					if(!exists) {
 						Iterator<IEntityLivingIdent> iter3 = entities.iterator();
-						while(iter2.hasNext()) {
-							IEntityLivingIdent ent2 = iter3.next();
-							if(ent1.matches(ent2)) {
+						while(iter3.hasNext()) {
+							IEntityLivingIdent ent3 = iter3.next();
+							if(ent1.matches(ent3)) {
 								count++;
 							}
 						}
@@ -242,7 +227,7 @@ public class CurseRequirements {
 		return entities.isEmpty() ? null : entities;
 	}
 	
-	public boolean isTimeCorrect(int worldTime, boolean timeless) {
+	public boolean isTimeCorrect(long worldTime, boolean timeless) {
 		if(startTime == -1 || endTime == -1) {
 			return true;
 		}

@@ -5,7 +5,10 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Random;
 
+import celestibytes.soulmagic.api.CurseHelper;
+import celestibytes.soulmagic.content.curses.CurseGluttony;
 import celestibytes.soulmagic.datatypes.Tuple;
+import celestibytes.soulmagic.init.ModCurses;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
@@ -32,7 +35,7 @@ public class BlockHarvestHandler {
 		extraDrops.put(Blocks.lapis_ore, new Tuple<Integer, Object>(0, new Tuple<ItemStack, Float>(new ItemStack(Items.dye, 1, 4), 5.0f)));
 		extraDrops.put(Blocks.quartz_ore, new Tuple<Integer, Object>(0, new Tuple<ItemStack, Float>(new ItemStack(Items.quartz), 2.0f)));
 		
-		extraDrops.put(Blocks.leaves, new Tuple<Integer, Object>(-1, new Tuple<ItemStack, Float>(new ItemStack(Item.getItemFromBlock(Blocks.leaves)), 2.25f)));
+//		extraDrops.put(Blocks.leaves, new Tuple<Integer, Object>(-1, new Tuple<ItemStack, Float>(new ItemStack(Item.getItemFromBlock(Blocks.leaves)), 2.25f)));
 		
 		extraDrops.put(Blocks.melon_block, new Tuple<Integer, Object>(0, new SpecialDropBehav() {
 			@Override
@@ -61,38 +64,39 @@ public class BlockHarvestHandler {
 	@SubscribeEvent
 	public void onEvent(BlockEvent.HarvestDropsEvent e) {
 		if(e.harvester != null && !e.isSilkTouching && !e.world.isRemote) {
-			System.out.println("Hellope");
-			// TODO: check if player has curse of gluttony
-			Tuple<Integer, Object> drp = extraDrops.get(e.block);
-			if(drp != null) {
-				if(drp.a.intValue() == -1 || drp.a.intValue() == e.blockMetadata) {
-					if(drp.b instanceof Tuple) {
-						Tuple<?,?> drop = (Tuple<?,?>) drp.b;
-						if(drop.a instanceof ItemStack && drop.b instanceof Float) {
-							float multip = (drop == null ? -1f : ((Float)drop.b).floatValue()  * (rand.nextFloat() + 0.25f));
-							ItemStack addDrop = ((ItemStack)drop.a).copy();
-							addDrop.stackSize = (int) Math.floor(((float)addDrop.stackSize) * multip);
-							e.drops.add(addDrop);
-						}
-					} else if(drp.b instanceof SpecialDropBehav) {
-						SpecialDropBehav drop = (SpecialDropBehav) drp.b;
-						Iterator<ItemStack> iter = e.drops.iterator();
-						LinkedList<ItemStack> extExtDrops = new LinkedList<ItemStack>();
-						int i=0;
-						while(iter.hasNext()) {
-							ItemStack is = iter.next();
-							ItemStack[] ext = drop.getExtraDrops(is, i, e.drops.size());
-							if(ext != null) {
-								for(ItemStack ist : ext) {
-									if(ist != null) {
-										extExtDrops.add(ist);
+			if(CurseHelper.hasPlayerCurse(CurseGluttony.class, e.harvester)) {
+				// TODO: check if player has curse of gluttony
+				Tuple<Integer, Object> drp = extraDrops.get(e.block);
+				if(drp != null) {
+					if(drp.a.intValue() == -1 || drp.a.intValue() == e.blockMetadata) {
+						if(drp.b instanceof Tuple) {
+							Tuple<?,?> drop = (Tuple<?,?>) drp.b;
+							if(drop.a instanceof ItemStack && drop.b instanceof Float) {
+								float multip = (drop == null ? -1f : ((Float)drop.b).floatValue()  * (rand.nextFloat() + 0.25f));
+								ItemStack addDrop = ((ItemStack)drop.a).copy();
+								addDrop.stackSize = (int) Math.floor(((float)addDrop.stackSize) * multip);
+								e.drops.add(addDrop);
+							}
+						} else if(drp.b instanceof SpecialDropBehav) {
+							SpecialDropBehav drop = (SpecialDropBehav) drp.b;
+							Iterator<ItemStack> iter = e.drops.iterator();
+							LinkedList<ItemStack> extExtDrops = new LinkedList<ItemStack>();
+							int i=0;
+							while(iter.hasNext()) {
+								ItemStack is = iter.next();
+								ItemStack[] ext = drop.getExtraDrops(is, i, e.drops.size());
+								if(ext != null) {
+									for(ItemStack ist : ext) {
+										if(ist != null) {
+											extExtDrops.add(ist);
+										}
 									}
 								}
+								i++;
 							}
-							i++;
+							
+							e.drops.addAll(extExtDrops);
 						}
-						
-						e.drops.addAll(extExtDrops);
 					}
 				}
 			}

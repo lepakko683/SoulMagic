@@ -3,6 +3,7 @@ package celestibytes.soulmagic.handler;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 
 import net.minecraft.block.Block;
@@ -10,6 +11,7 @@ import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
+import celestibytes.soulmagic.api.CurseHelper;
 import celestibytes.soulmagic.api.ICurse;
 import celestibytes.soulmagic.api.datatypes.BlockPos;
 import celestibytes.soulmagic.api.datatypes.IEntityLivingIdent;
@@ -52,12 +54,15 @@ public class RiteDetector {
 	
 	private int regulator;
 	
+	private boolean addInitialTargets = true;
+	
 	public RiteDetector(World world, ICurse curse, int cx, int cy, int cz, Tuple<Block, Integer> trigger) {
 		this.world = world;
 		this.curse = curse;
 		this.trigger = trigger;
 		this.requirements = curse.getCurseRequirements();
 		this.reqDone = new CurseRequirements.Done();
+		this.targets = new LinkedList<Tuple<EntityPlayer, CurseRequirements>>();
 		this.cx = cx;
 		this.cy = cy;
 		this.cz = cz;
@@ -101,7 +106,8 @@ public class RiteDetector {
 			
 		}
 		
-		if(regulator % 200 == 0) { // check targeted players every 10 seconds
+		if(regulator % 200 == 0 || addInitialTargets) { // check targeted players every 10 seconds
+			addInitialTargets = false;
 			@SuppressWarnings("unchecked")
 			List<EntityPlayer> players = world.getEntitiesWithinAABB(EntityPlayer.class, checkArea);
 			if(players == null) {
@@ -109,8 +115,17 @@ public class RiteDetector {
 			} else if(players.isEmpty()) {
 				sleep = true;
 			} else {
-				if(targets != null) { // TODO: temporary
+				if(targets.isEmpty()) {
+					Iterator<EntityPlayer> iter2 = players.iterator();
+					
+					while(iter2.hasNext()) {
+						EntityPlayer plr = iter2.next();
+						CurseRequirements plrsReq = null; //curse.getPlayerSpecificRequirements(plr);
+						targets.add(new Tuple<EntityPlayer, CurseRequirements>(plr, plrsReq));
+					}
+				} else {
 					Iterator<Tuple<EntityPlayer, CurseRequirements>> iter1 = targets.iterator();
+					
 					while(iter1.hasNext()) {
 						EntityPlayer tgt = iter1.next().a;
 						Iterator<EntityPlayer> iter2 = players.iterator();
@@ -121,7 +136,7 @@ public class RiteDetector {
 							if(tgt == plr) {
 								targetAround = true;
 							} else {
-								CurseRequirements plrsReq = curse.getPlayerSpecificRequirements(plr);
+								CurseRequirements plrsReq = null; //curse.getPlayerSpecificRequirements(plr);
 								targets.add(new Tuple<EntityPlayer, CurseRequirements>(plr, plrsReq));
 							}
 						}
@@ -223,10 +238,10 @@ public class RiteDetector {
 			return false;
 		}
 		
-		if(reqDone.validate(requirements, world)) {
+		if(targets != null && !targets.isEmpty() && reqDone.validate(requirements, world)) {
 			doCurse();
 		} else {
-			System.out.println("Curse invalid!");
+			Log.info("Curse invalid!");
 		}
 		
 		
@@ -234,7 +249,15 @@ public class RiteDetector {
 	}
 	
 	private void doCurse() {
-		Log.info("Attempting curse...");
+		Iterator<Tuple<EntityPlayer, CurseRequirements>> iter = targets.iterator();
+		while(iter.hasNext()) {
+			Tuple<EntityPlayer, CurseRequirements> plr = iter.next();
+			boolean boo = CurseHelper.addCurseToPlayer(curse.getClass(), plr.a);
+			//Log.info("Add curse to: " + plr.a.getDisplayName() + ": " + boo);
+			if(boo) {
+				Log.info(plr.a.getDisplayName() + " has been cursed with: " + curse.getCurseId());
+			}
+		}
 	}
 	
 	private boolean detectPlayer() {

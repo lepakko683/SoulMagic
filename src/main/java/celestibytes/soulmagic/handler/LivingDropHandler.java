@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Random;
 
+import celestibytes.soulmagic.api.CurseHelper;
+import celestibytes.soulmagic.content.curses.CurseGluttony;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
@@ -52,12 +54,12 @@ public class LivingDropHandler {
 		if(!e.entityLiving.worldObj.isRemote && e.source instanceof EntityDamageSource) {
 			if(((EntityDamageSource) e.source).getEntity() instanceof EntityPlayer) {
 				EntityPlayer plr = (EntityPlayer) ((EntityDamageSource)e.source).getEntity();
-				// Check if player has curse of gluttony
-				
-				DropHandler dh = dropHandlers.get(e.entityLiving.getClass());
-				
-				if(dh != null) {
-					dh.addDrops(e.entityLiving, plr, e.drops);
+				if(CurseHelper.hasPlayerCurse(CurseGluttony.class, plr)) {
+					DropHandler dh = dropHandlers.get(e.entityLiving.getClass());
+					
+					if(dh != null) {
+						dh.addDrops(e.entityLiving, plr, e.drops);
+					}
 				}
 			}
 		}

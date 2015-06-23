@@ -38,6 +38,11 @@ public class CurseGluttony implements ICurse {
 		List<Tuple<Block,Integer>> blocks = new LinkedList<Tuple<Block,Integer>>();
 		blocks.add(new Tuple<Block, Integer>(Blocks.lapis_block, 0));
 		blocks.add(new Tuple<Block, Integer>(Blocks.lapis_block, 0));
+		blocks.add(new Tuple<Block, Integer>(Blocks.cake, 0));
+		blocks.add(new Tuple<Block, Integer>(Blocks.cake, 0));
+		blocks.add(new Tuple<Block, Integer>(Blocks.cake, 0));
+		blocks.add(new Tuple<Block, Integer>(Blocks.cake, 0));
+		blocks.add(new Tuple<Block, Integer>(Blocks.cake, 0));
 		List<IEntityLivingIdent> ents = new LinkedList<IEntityLivingIdent>();
 		ents.add(pigIdent);
 		requirements.setRequiredBlocks(blocks);
