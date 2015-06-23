@@ -69,7 +69,7 @@ public class CTEntityPlayer implements IClassTransformer {
 							inj.add(new VarInsnNode(Opcodes.ALOAD, 0));
 							if(obf) {
 								inj.add(new MethodInsnNode(Opcodes.INVOKESTATIC, ASM_CALLS, "getExhaustion", "(FLyz;)F", false));
-							} else{
+							} else {
 								inj.add(new MethodInsnNode(Opcodes.INVOKESTATIC, ASM_CALLS, "getExhaustion", "(FLnet/minecraft/entity/player/EntityPlayer;)F", false));
 							}
 							

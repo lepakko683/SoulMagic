@@ -17,6 +17,8 @@ import celestibytes.soulmagic.init.ModCurses;
 
 public class CurseGluttony implements ICurse {
 	
+	public static final float exhaustionMultiplier = 1.6f;
+	
 	public static final Tuple<Block, Integer> trigger = new Tuple<Block, Integer>(Blocks.gold_block, 0);
 	
 	private static final IEntityLivingIdent pigIdent = new IEntityLivingIdent() {

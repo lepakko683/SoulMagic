@@ -17,6 +17,7 @@ import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.NBTTagCompound;
 import celestibytes.soulmagic.api.ICurse;
 import celestibytes.soulmagic.api.SoulMagicAPI;
+import celestibytes.soulmagic.handler.DataHandler;
 import celestibytes.soulmagic.misc.Log;
 
 public class PlayerExtraData {
@@ -30,8 +31,36 @@ public class PlayerExtraData {
 	public List<ICurse> curses;
 	// list of abilities
 	
+	// little bit of curse caching
+	private String cc_curseId = null;
+	private boolean cc_retValue = false;
+	private long cc_lastCheck = 0;
+	
 	private PlayerExtraData() {
 		curses = new LinkedList<ICurse>();
+	}
+	
+	public boolean hasCurse(String curseId) {
+		if(System.currentTimeMillis() - cc_lastCheck < 2000) {
+			if(curseId.equals(cc_curseId)) {
+				return cc_retValue;
+			}
+		}
+		
+		System.out.println("Recheck curse!");
+		
+		cc_retValue = false;
+		Iterator<ICurse> iter = curses.iterator();
+		while(iter.hasNext()) {
+			if(iter.next().getCurseId().equals(curseId)) {
+				cc_retValue = true;
+				break;
+			}
+		}
+		
+		cc_curseId = curseId;
+		cc_lastCheck = System.currentTimeMillis();
+		return cc_retValue;
 	}
 	
 	public final void writeToNBT(NBTTagCompound nbt) {

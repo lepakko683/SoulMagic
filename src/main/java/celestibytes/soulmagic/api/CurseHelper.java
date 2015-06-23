@@ -18,13 +18,8 @@ public class CurseHelper {
 	}
 	
 	public static boolean hasPlayerCurse(String curseId, EntityPlayer player) {
-		Iterator<ICurse> iter = DataHandler.getExtraData(player).curses.iterator();
-		while(iter.hasNext()) {
-			if(iter.next().getCurseId().equals(curseId)) {
-				return true;
-			}
-		}
-		return false;
+		PlayerExtraData data = DataHandler.getExtraData(player);
+		return data.hasCurse(curseId);
 	}
 	
 	public static boolean hasPlayerCurse(Class<? extends ICurse> curse, EntityPlayer player) {

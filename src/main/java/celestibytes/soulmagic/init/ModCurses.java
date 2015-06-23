@@ -12,8 +12,13 @@ public class ModCurses {
 	public static final String CURSE_WRATH = Ref.MOD_ID + ":wrth";
 	public static final String CURSE_LUST = Ref.MOD_ID + ":lust";
 	
+	public static int CURSE_ID_GLUTTONY = -1;
+	public static int CURSE_ID_WRATH = -1;
+	public static int CURSE_ID_LUST = -1;
+	
 	public static void init() {
-		SoulMagicAPI.registerCurse(CURSE_GLUTTONY, CurseGluttony.class, Blocks.gold_block, 0);
+		CURSE_ID_GLUTTONY = SoulMagicAPI.registerCurse(CURSE_GLUTTONY, CurseGluttony.class, Blocks.gold_block, 0);
 		//SoulMagicAPI.registerCurse(CURSE_WRATH, CurseWrath.class);
 	}
+	
 }
