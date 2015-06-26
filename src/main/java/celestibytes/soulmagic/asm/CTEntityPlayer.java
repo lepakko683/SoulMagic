@@ -16,29 +16,19 @@ import net.minecraft.launchwrapper.IClassTransformer;
 
 public class CTEntityPlayer implements IClassTransformer {
 	
-	private static final String E_PLR_CLS_OBF = "yz";
 	private static final String E_PLR_CLS = "net.minecraft.entity.player.EntityPlayer";
+	private static final String E_PLR_CLS_OBF = "yz";
 	private static final String ADD_EXH_M_OBF = "a";
 	private static final String ADD_EXH_M = "addExhaustion";
 	private static final String ADD_EXH_M_DESC = "(F)V";
 	
 	private static final String ASM_CALLS = "celestibytes/soulmagic/asm/ASMCalls";
 	
-	private boolean ran = false;
-
 	@Override
-	public byte[] transform(String name, String transformedName, byte[] bytes) {
-		if(!ran) {
-			System.out.println("CTing!");
-			ran = true;
-		}
+	public byte[] transform(String name, String srgName, byte[] bytes) {
 		boolean obf = false;
-		if(E_PLR_CLS_OBF.equals(name)) {
-			System.out.println("Transforming EntityPlayer(" + E_PLR_CLS_OBF + ")...");
-			obf = true;
-		} else if(E_PLR_CLS.equals(name)) {
-			System.out.println("Transforming EntityPlayer in deobfuscated environment...");
-			obf = false;
+		if(E_PLR_CLS.equals(srgName)) {
+			obf = SoulMagicASM.isObfuscatedEnv();
 		} else {
 			return bytes;
 		}
@@ -74,7 +64,7 @@ public class CTEntityPlayer implements IClassTransformer {
 							}
 							
 							mn.instructions.insertBefore(min, inj);
-							ClassWriter cw = new ClassWriter(ClassWriter.COMPUTE_MAXS | ClassWriter.COMPUTE_FRAMES);
+							ClassWriter cw = new ClassWriter(ClassWriter.COMPUTE_MAXS); //  | ClassWriter.COMPUTE_FRAMES
 							cn.accept(cw);
 							
 							System.out.println("Injection done");

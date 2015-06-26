@@ -11,6 +11,12 @@ import celestibytes.soulmagic.misc.Log;
 public class DataHandler {
 	public static HashMap<UUID, PlayerExtraData> playerData = new HashMap<UUID, PlayerExtraData>();
 	
+	public static void clearData() {
+		if(!playerData.isEmpty()) {
+			playerData.clear();
+		}
+	}
+	
 	public static PlayerExtraData getExtraData(EntityPlayer player) {
 		if(player != null) {
 			PlayerExtraData data = playerData.get(player.getUniqueID());

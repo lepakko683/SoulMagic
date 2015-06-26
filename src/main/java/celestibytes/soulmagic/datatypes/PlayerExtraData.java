@@ -5,6 +5,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.lang.ref.WeakReference;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -18,6 +19,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import celestibytes.soulmagic.api.ICurse;
 import celestibytes.soulmagic.api.SoulMagicAPI;
 import celestibytes.soulmagic.handler.DataHandler;
+import celestibytes.soulmagic.handler.RiteDetector;
 import celestibytes.soulmagic.misc.Log;
 
 public class PlayerExtraData {
@@ -28,6 +30,7 @@ public class PlayerExtraData {
 	public int curseSlots = 1;
 	public int soulStatus = 0; // -10 .. 10
 	
+	private WeakReference<RiteDetector> boundRite;
 	public List<ICurse> curses;
 	// list of abilities
 	
@@ -38,6 +41,14 @@ public class PlayerExtraData {
 	
 	private PlayerExtraData() {
 		curses = new LinkedList<ICurse>();
+	}
+	
+	public boolean canActivateRite() {
+		return boundRite != null ? boundRite.get() == null : true;
+	}
+	
+	public void bindRite(RiteDetector rd) {
+		boundRite = new WeakReference<RiteDetector>(rd);
 	}
 	
 	public boolean hasCurse(String curseId) {

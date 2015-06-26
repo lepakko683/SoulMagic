@@ -28,11 +28,9 @@ public class ItemRelic extends ModItem {
 	@Override
 	public boolean onItemUse(ItemStack stack, EntityPlayer plr, World world, int x, int y, int z, int side, float hitX, float hitY, float hitZ) {
 		if(!world.isRemote) {
-			System.out.println("click!");
-			RiteDetectorHandler.addDetector(world, x, y, z); // TODO: bind detector to player
+			RiteDetectorHandler.addDetector(world, x, y, z, plr);
 		}
 		return true;
-		// return super.onItemUse(stack, plr, world, x, y, z, side, hitX, hitY, hitZ);
 	}
 	
 	// TODO: ALL THE THINGS

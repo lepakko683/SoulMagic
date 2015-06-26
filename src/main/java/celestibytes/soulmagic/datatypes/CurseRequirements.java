@@ -24,6 +24,7 @@ public class CurseRequirements {
 		
 		public boolean validate(CurseRequirements req, World world) {
 			if(!req.isTimeCorrect(world.getWorldTime(), !world.provider.isSurfaceWorld())) {
+				Log.info("incorrect time for curse!");
 				return false;
 			}
 			

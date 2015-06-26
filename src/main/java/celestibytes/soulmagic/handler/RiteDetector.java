@@ -9,6 +9,7 @@ import java.util.List;
 import net.minecraft.block.Block;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
 import celestibytes.soulmagic.api.CurseHelper;
@@ -19,6 +20,7 @@ import celestibytes.soulmagic.datatypes.CurseRequirements;
 import celestibytes.soulmagic.datatypes.Triple;
 import celestibytes.soulmagic.datatypes.Tuple;
 import celestibytes.soulmagic.misc.Log;
+import celestibytes.soulmagic.network.WorldSideHelper;
 
 // will be removed if the trigger block is removed
 
@@ -203,6 +205,7 @@ public class RiteDetector {
 						
 						if(requirements.isRequired(cBlc, cMeta)) {
 							reqDone.normalBlocks.add(new Tuple<Tuple<Block, Integer>, BlockPos>(new Tuple<Block, Integer>(cBlc, cMeta), new BlockPos(xx, yy, zz)));
+							Log.info("found required block: " + cBlc.getUnlocalizedName());
 						}
 						
 						i++;
@@ -241,7 +244,8 @@ public class RiteDetector {
 		if(targets != null && !targets.isEmpty() && reqDone.validate(requirements, world)) {
 			doCurse();
 		} else {
-			Log.info("Curse invalid!");
+			WorldSideHelper.spawnParticleSpreaded(world, "largesmoke", cx + .5f, cy + 1f, cz + .5f, 0f, .15f, 0f, .2f, .2f, 5);
+			Log.info("Curse invalid! targets==null: " + (targets == null) + " targets.isEmpty: " + (targets == null ? "null" : targets.isEmpty()));
 		}
 		
 		
@@ -254,7 +258,13 @@ public class RiteDetector {
 			Tuple<EntityPlayer, CurseRequirements> plr = iter.next();
 			boolean boo = CurseHelper.addCurseToPlayer(curse.getClass(), plr.a);
 			//Log.info("Add curse to: " + plr.a.getDisplayName() + ": " + boo);
+//			world.playSoundAtEntity(plr.a, "mob.enderdragon.growl", 1f, .5f);
+			if(plr.a instanceof EntityPlayerMP) {
+				WorldSideHelper.playSoundAtPlayer((EntityPlayerMP) plr.a, "mob.enderdragon.growl", 1f, .5f);
+			}
+			
 			if(boo) {
+				WorldSideHelper.spawnParticleSpreaded(world, "flame", (float) plr.a.posX, (float) plr.a.posY + plr.a.eyeHeight, (float) plr.a.posZ, 0f, 0f, 0f, 1f, .25f, 10);
 				Log.info(plr.a.getDisplayName() + " has been cursed with: " + curse.getCurseId());
 			}
 		}
