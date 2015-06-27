@@ -4,3 +4,12 @@ itemGroup.soulmagic:creativeTab=Soul Magic
 # Items
 item.soulmagic:liquidCorruptOrb.name=DEBUG: toggle curses
 item.soulmagic:relic.name=Relic
+
+# Relic
+item.soulmagic:relic.owner=Owner
+item.soulmagic:relic.mode.knowledge=Knowledge
+item.soulmagic:relic.mode.abilities=Abilities
+item.soulmagic:relic.mode.startRite=Activate Rite
+item.soulmagic:relic.mode.examine=Examine
+item.soulmagic:relic.mode.rest=Rest
+item.soulmagic:relic.mode.tool=Tool
