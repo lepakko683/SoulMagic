@@ -33,9 +33,6 @@ public interface ICurse {
 	/** Extra requirements for a specific player, if none return null */
 	public CurseRequirements getPlayerSpecificRequirements(EntityPlayer player);
 	
-	/**  The required things to cleanse the curse. Has the same format as getCurseRequirements() */
-	// public CurseRequirements getUncurseRequirements(EntityPlayer player);
-	
 	/** Called when the curse process succeeds, the curse itself might still fail (e.g. if the target has curse-protection) */
 	public void onCursePlayer(EntityPlayer caster, EntityPlayer target);
 	

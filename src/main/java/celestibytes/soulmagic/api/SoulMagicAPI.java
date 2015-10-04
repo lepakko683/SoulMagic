@@ -1,12 +1,20 @@
 package celestibytes.soulmagic.api;
 
 import java.util.HashMap;
+import java.util.Map;
 
+import celestibytes.soulmagic.api.datatypes.ListGuiInfo;
+import celestibytes.soulmagic.api.datatypes.PageGuiInfo;
 import celestibytes.soulmagic.misc.Log;
 import cpw.mods.fml.common.registry.GameData;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 
 public class SoulMagicAPI {
+	
+	@SideOnly(Side.CLIENT)
+	public static final ListGuiInfo knowledgeReg = new ListGuiInfo("knowledge");
 	
 	public static final HashMap<String, Class<? extends ICurse>> curseRegistry = new HashMap<String, Class<? extends ICurse>>();
 	public static final HashMap<String, Class<? extends ICurse>> trBlcToCurseReg = new HashMap<String, Class<? extends ICurse>>();
@@ -21,6 +29,7 @@ public class SoulMagicAPI {
 	 *  @return the numeric id of the curse. -1 on failed registration. */
 	public static int registerCurse(String curseId, Class<? extends ICurse> curse, Block trBlc, int trMeta) {
 		if(!curseRegistry.containsKey(curseId)) {
+			/* triggerBlockId */
 			String trBlcId = GameData.getBlockRegistry().getNameForObject(trBlc);
 			if(trBlcId == null) {
 				Log.err("Trigger block doesn't exist in block registry");
@@ -85,4 +94,26 @@ public class SoulMagicAPI {
 		
 		return null;
 	}
+	
+	@SideOnly(Side.CLIENT)
+	public static boolean registerKnowledgePage(PageGuiInfo page) {
+		if(page == null || !page.pagePath.startsWith("knowledge.")) {
+			return false; // examine.plants.trees
+		}
+		
+		Object ret = knowledgeReg.recurseListTree(page.pagePath, 0, page);
+		return ret != null && ret instanceof PageGuiInfo;
+	}
+	
+	@SideOnly(Side.CLIENT)
+	public static PageGuiInfo getKnowledgePage(String path) {
+		if(path == null || !path.startsWith("knowledge.")) {
+			return null;
+		}
+		
+		Object ret = knowledgeReg.recurseListTree(path, 0, null);
+		
+		return ret instanceof PageGuiInfo ? (PageGuiInfo) ret : null;
+	}
+	
 }

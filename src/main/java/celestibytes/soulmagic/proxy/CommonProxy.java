@@ -27,6 +27,8 @@ public class CommonProxy {
 		ModCurses.init();
 	}
 	
+	public void initRelicGuis() {}
+	
 	public void initNonClient() {
 		FMLCommonHandler.instance().bus().register(new RiteDetectorHandler());
 	}

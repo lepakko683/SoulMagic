@@ -6,6 +6,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.world.World;
 import cpw.mods.fml.common.network.NetworkRegistry;
+import celestibytes.soulmagic.network.message.MessageOpenSimpleGui;
 import celestibytes.soulmagic.network.message.MessagePlaySoundFx;
 import celestibytes.soulmagic.network.message.MessageSpawnParticles;
 
@@ -51,5 +52,9 @@ public class WorldSideHelper {
 	
 	public static void playSoundAtPlayer(EntityPlayerMP plr, String soundName, float volume, float pitch) {
 		PacketHandler.INSTANCE.sendTo(new MessagePlaySoundFx(soundName, (float) plr.posX, (float) plr.posY, (float) plr.posZ, volume, pitch), plr);
+	}
+	
+	public static void openSimpleGuiForPlayer(EntityPlayerMP plr, int guiCode) {
+		PacketHandler.INSTANCE.sendTo(new MessageOpenSimpleGui(guiCode), plr);
 	}
 }

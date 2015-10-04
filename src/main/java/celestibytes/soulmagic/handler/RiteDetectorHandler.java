@@ -39,6 +39,7 @@ public class RiteDetectorHandler {
 			Log.info("Cannot have more than one rite at a time!");
 			return;
 		}
+		
 		Block blc = world.getBlock(x, y, z);
 		int meta = world.getBlockMetadata(x, y, z);
 		

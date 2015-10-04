@@ -7,4 +7,8 @@ public class Ref {
 	
 	public static final String PROXY_CLIENT = "celestibytes.soulmagic.proxy.ClientProxy";
 	public static final String PROXY_SERVER = "celestibytes.soulmagic.proxy.ServerProxy";
+	
+	public static class Guis {
+		public static final int KNOWLEDGE = 1;
+	}
 }

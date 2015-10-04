@@ -12,6 +12,7 @@ import celestibytes.soulmagic.api.datatypes.IEntityLivingIdent;
 import celestibytes.soulmagic.misc.Log;
 
 public class CurseRequirements {
+	
 	public static class Done {
 		public List<Tuple<Tuple<Block, Integer>, BlockPos>> normalBlocks;
 		

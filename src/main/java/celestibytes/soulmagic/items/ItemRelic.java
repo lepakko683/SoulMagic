@@ -4,7 +4,9 @@ import java.util.List;
 
 import celestibytes.soulmagic.Ref;
 import celestibytes.soulmagic.handler.RiteDetectorHandler;
+import celestibytes.soulmagic.network.WorldSideHelper;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumChatFormatting;
@@ -87,6 +89,10 @@ public class ItemRelic extends ModItem {
 			if(!modeSwitch) {
 				switch(mode) {
 				case 0:
+					if(plr instanceof EntityPlayerMP) {
+						WorldSideHelper.openSimpleGuiForPlayer((EntityPlayerMP) plr, Ref.Guis.KNOWLEDGE);
+					}
+					
 					System.out.println("Knowledge!");
 					break;
 				case 1:

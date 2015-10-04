@@ -39,6 +39,8 @@ public class SoulMagic {
 	@EventHandler
 	public void postInit(FMLPostInitializationEvent e) {
 		proxy.postInit(e);
+		
+		proxy.initRelicGuis();
 	}
 	
 	@EventHandler
